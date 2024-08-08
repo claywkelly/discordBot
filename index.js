@@ -1,12 +1,12 @@
 const { Client, Constants, CommandInteraction } = require("oceanic.js");
-const ytdl = require("ytdl-core");
+const ytdl = require("@distube/ytdl-core");
 const { joinVoiceChannel, createAudioResource, createAudioPlayer } = require("@discordjs/voice");
 const ytSearch = require("yt-search");
 const { YTService } = require("./services/ytService");
 require('dotenv').config();
 
 const token = 'Bot ' + process.env.CLIENT_TOKEN;
-const guildId = process.env.GUILD_ID_TT;
+const guildId =  process.env.GUILD_ID_TT;
 
 let queue = [];
 const audioPlayer = createAudioPlayer();
@@ -139,7 +139,9 @@ async function playQueue(){
     const ytdlProcess = ytdl(queue[0].url, { filter: "audioonly" })
     ytdlProcess.on("error", error => console.error(error));
     console.log(`Now playing: ${queue[0].title}`);
-    audioPlayer.play(createAudioResource(ytdlProcess));
+    const audioResource = createAudioResource(ytdlProcess);
+    console.log("created the audio resource");
+    audioPlayer.play(audioResource);
     await sleep(2000);
   } else {
     return;
