@@ -136,7 +136,15 @@ async function playNext(){
 
 async function playQueue(){
   if(queue.length > 0){
-    const ytdlProcess = ytdl(queue[0].url, { filter: "audioonly" })
+    const ytdlProcess = ytdl(queue[0].url, {
+      quality: 'highestaudio',
+      filter: (form) => {
+        if (form.bitrate) {
+          return form.bitrate <= 64000;
+        } 
+        return false;
+      }
+    });
     ytdlProcess.on("error", error => console.error(error));
     console.log(`Now playing: ${queue[0].title}`);
     const audioResource = createAudioResource(ytdlProcess);
